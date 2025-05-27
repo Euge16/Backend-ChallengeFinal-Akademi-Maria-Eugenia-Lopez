@@ -2,17 +2,13 @@ const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require("nodemailer");
-const Usuario = require('../modelos/Usuario');
+const {Usuario, Estudiante} = require('../modelos/Usuario');
 
 
-
-const registrarUsuario = async (req, res, next) => {
-  const errores = validationResult(req);
-  if (!errores.isEmpty()) {
-    return res.status(422).json({ message: 'Datos inválidos. Verifique e intente nuevamente.' });
-  }
+const registrarEstudiante = async (req, res, next) => {
 
   const { nombre, email, password, rol } = req.body;
+
 
   let usuarioExistente;
   try {
@@ -23,11 +19,11 @@ const registrarUsuario = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const nuevoUsuario = new Usuario({
+    const nuevoUsuario = new Estudiante({
       nombre,
       email,
       password: hashedPassword,
-      rol: rol 
+      rol: rol
     });
 
     await nuevoUsuario.save();
@@ -139,7 +135,7 @@ const restablecerPassword = async (req, res, next) => {
 };
 
 
-exports.registrarUsuario = registrarUsuario;
+exports.registrarEstudiante = registrarEstudiante;
 exports.iniciarSesion = iniciarSesion;
 exports.solicitarRecuperacionPassword = solicitarRecuperacionPassword;
 exports.restablecerPassword = restablecerPassword;
