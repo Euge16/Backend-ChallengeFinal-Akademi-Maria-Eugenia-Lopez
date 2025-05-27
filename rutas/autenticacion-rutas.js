@@ -4,7 +4,7 @@ const autenticacionControlador = require('../controladores/autenticacion-control
 
 
 
-router.post('/registrarse', autenticacionControlador.registrarUsuario);
+router.post('/registrarse', autenticacionControlador.registrarEstudiante);
 
 router.post('/iniciar-sesion', autenticacionControlador.iniciarSesion);
 
