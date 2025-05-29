@@ -1,18 +1,21 @@
-const { validationResult } = require('express-validator');
-const bcrypt = require('bcryptjs');
 const Curso = require('../modelos/Curso');
 
 const crearCurso = async (req, res, next) => {
-    try {
-        const { nombre, descripcion } = req.body;
+    const { nombre, descripcion, cupo } = req.body;
+    const docenteId = req.usuarioAutenticado.usuarioId;
 
-        const docenteId = req.usuarioAutenticado.usuarioId;
+    if (req.usuarioAutenticado.rol !== 'docente') {
+      return res.status(403).json({ mensaje: 'Solo un docente puede crear cursos' });
+    }
+    
+    try {
 
         const nuevoCurso = new Curso({
             nombre,
             descripcion,
             docenteId,
-            estudianteId: []   
+            estudiantes: [],
+            cupo   
         });
 
         await nuevoCurso.save();
@@ -27,7 +30,7 @@ const crearCurso = async (req, res, next) => {
 
 const getCursos = async (req, res, next) => {
     try {
-        const cursos = await Curso.find().select('-estudianteId -createdAt -updatedAt -__v').populate('docenteId', 'nombre email');
+        const cursos = await Curso.find().select('nombre descripcion docenteId').populate('docenteId', 'nombre email');
         res.status(200).json({ cursos });
     } catch (error) {
         console.error('Error al obtener cursos:', error);
@@ -37,7 +40,7 @@ const getCursos = async (req, res, next) => {
 
 const getCursoPorId = async (req, res, next) => {
     try {
-        const curso = await Curso.findById(req.params.id).select('-estudianteId -createdAt -updatedAt -__v').populate('docenteId', 'nombre email');
+        const curso = await Curso.findById(req.params.id).select('nombre descripcion docenteId').populate('docenteId', 'nombre email');
         if (!curso) {
             return res.status(404).json({ mensaje: 'Curso no encontrado' });
         }
@@ -52,9 +55,9 @@ const editarCurso = async (req, res, next) => {
     
     try {
         const { id } = req.params;
-        const { nombre, descripcion } = req.body;
-        const curso = await Curso.findById(id);
+        const { nombre, descripcion, cupo } = req.body;
 
+        const curso = await Curso.findById(id);
         if (!curso) {
             return res.status(404).json({ mensaje: 'Curso no encontrado' });
         }
@@ -66,6 +69,7 @@ const editarCurso = async (req, res, next) => {
         
         if (nombre) curso.nombre = nombre;
         if (descripcion) curso.descripcion = descripcion;
+        if (cupo) curso.cupo = cupo;
 
         await curso.save();
 
@@ -94,17 +98,23 @@ const eliminarCurso = async (req, res, next) => {
         res.status(200).json({ mensaje: 'Curso eliminado' });
 
     } catch (error) {
-        console.error('Error al eliminar curso:', error);
         res.status(500).json({ mensaje: 'Error al eliminar curso', error });
     }
 };
 
 const getCursosDelProfesor = async (req, res, next) => {
+    const usuarioId = req.usuarioAutenticado.usuarioId;
+    const rol = req.usuarioAutenticado.rol;
+    const { id } = req.params;
+
+    if (usuarioId !== id && rol !== 'superadmin') {
+        return res.status(403).json({ mensaje: 'No tienes permiso para ver estos cursos.' });
+    }
+
     try {
-        const cursos = await Curso.find({ docenteId: req.params.id });
+        const cursos = await Curso.find({ docenteId: id });
         res.status(200).json({ cursos });
     } catch (error) {
-        console.error('Error al obtener cursos del profesor:', error);
         res.status(500).json({ mensaje: 'Error al obtener cursos del profesor', error });
     }
 };
