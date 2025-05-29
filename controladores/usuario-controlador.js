@@ -1,4 +1,3 @@
-const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const { Superadmin, Docente, Usuario } = require('../modelos/Usuario');
 
@@ -76,12 +75,6 @@ const eliminarUsuario = async (req, res, next) => {
 
 
 const editarUsuario = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    console.log(errors);
-    return res.status(422).json({ message: 'Datos inválidos, por favor revisa los campos.' });
-  }
-
   const usuarioId = req.params.id;
   const { nombre, email, rol, biografia, titulo } = req.body;
 
