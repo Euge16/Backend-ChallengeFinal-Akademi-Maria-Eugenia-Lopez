@@ -1,19 +1,24 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require("nodemailer");
+const { validationResult } = require('express-validator');
 const {Usuario, Estudiante} = require('../modelos/Usuario');
 
 
 const registrarEstudiante = async (req, res, next) => {
 
-  const { nombre, email, password, rol } = req.body;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
+  const { nombre, email, password, rol } = req.body;
 
   let usuarioExistente;
   try {
     usuarioExistente = await Usuario.findOne({ email });
     if (usuarioExistente) {
-      return res.status(422).json({ message: 'El usuario ya existe. Por favor inicie sesión.' });
+      return res.status(422).json({ mensaje: 'El usuario ya existe. Por favor inicie sesión.' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -28,6 +33,7 @@ const registrarEstudiante = async (req, res, next) => {
     await nuevoUsuario.save();
 
     res.status(201).json({
+      mensaje: 'Usuario registrado exitosamente.',
       usuarioId: nuevoUsuario.id,
       nombre: nuevoUsuario.nombre,
       email: nuevoUsuario.email,
@@ -35,24 +41,29 @@ const registrarEstudiante = async (req, res, next) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error al registrar el usuario. Intente más tarde.' });
+    res.status(500).json({ mensaje: 'Error al registrar el usuario. Intente más tarde.' });
   }
 };
 
 
 const iniciarSesion = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { email, password } = req.body;
 
   let usuario;
   try {
     usuario = await Usuario.findOne({ email });
     if (!usuario) {
-      return res.status(401).json({ message: 'Credenciales inválidas.' });
+      return res.status(401).json({ mensaje: 'Credenciales inválidas.' });
     }
 
     const passwordValido = await bcrypt.compare(password, usuario.password);
     if (!passwordValido) {
-      return res.status(401).json({ message: 'Credenciales inválidas.' });
+      return res.status(401).json({ mensaje: 'Credenciales inválidas.' });
     }
 
     const token = jwt.sign(
@@ -70,11 +81,16 @@ const iniciarSesion = async (req, res, next) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error al iniciar sesión. Intente más tarde.' });
+    res.status(500).json({ mensaje: 'Error al iniciar sesión. Intente más tarde.' });
   }
 };
 
 const solicitarRecuperacionPassword = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { email } = req.body;
   try {
     const usuario = await Usuario.findOne({ email });
@@ -96,7 +112,7 @@ const solicitarRecuperacionPassword = async (req, res, next) => {
       from: process.env.EMAIL_USUARIO,
       to: email,
       subject: 'Recuperación de contraseña',
-      text: `Haz clic en este enlace para restablecer tu contraseña: http://localhost:5000/api/autenticacion/restablecer-password/${token}`
+      text: `Haz clic en este enlace para restablecer tu contraseña: http://localhost:3000/restablecer-password/${token}`
     };
 
     await transporte.sendMail(emailOpciones);
@@ -109,6 +125,11 @@ const solicitarRecuperacionPassword = async (req, res, next) => {
 };
 
 const restablecerPassword = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { token } = req.params;
   const { nuevaPassword } = req.body;
 
@@ -120,7 +141,6 @@ const restablecerPassword = async (req, res, next) => {
       return res.status(404).json({ mensaje: 'Usuario no encontrado.' });
     }
 
-    // Hashear nueva contraseña
     const passwordHasheada = await bcrypt.hash(nuevaPassword, 12);
     usuario.password = passwordHasheada;
 
