@@ -1,17 +1,23 @@
 const bcrypt = require('bcryptjs');
+const { validationResult } = require('express-validator');
 const { Superadmin, Docente, Usuario } = require('../modelos/Usuario');
 
 
 const getUsuarios = async (req, res, next) => {
-  const { pagina , limite } = req.query;
+  const { pagina , limite, nombre, email, rol } = req.query;
   const paginaInt = parseInt(pagina);
   const limiteInt = parseInt(limite);
+  const filtro = {};
+  if(nombre) filtro.nombre = new RegExp(nombre, 'i');
+  if(email) filtro.email  = new RegExp(email, 'i');
+  if(rol) filtro.rol  = new RegExp(rol, 'i');
+
   try {
-    const usuarios = await Usuario.find({}, '-password')
+    const usuarios = await Usuario.find(filtro, '-password')
       .skip((paginaInt - 1) * limiteInt)
       .limit(limiteInt);
 
-    const total = await Usuario.countDocuments();
+    const total = await Usuario.countDocuments(filtro);
     res.json({
       paginaActual: paginaInt,
       totalPaginas: Math.ceil(total / limiteInt),
@@ -75,6 +81,12 @@ const eliminarUsuario = async (req, res, next) => {
 
 
 const editarUsuario = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+
   const usuarioId = req.params.id;
   const { nombre, email, rol, biografia, titulo } = req.body;
 
@@ -122,6 +134,11 @@ const editarUsuario = async (req, res, next) => {
 
 
 const crearDocenteOSuperadmin = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { nombre, email, password, rol, titulo, biografia } = req.body;
 
   if (!req.usuarioAutenticado || req.usuarioAutenticado.rol !== 'superadmin') {
