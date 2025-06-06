@@ -26,21 +26,23 @@ const getUsuarios = async (req, res, next) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error al obtener los usuarios. Intente más tarde.' });
+    res.status(500).json({ mensaje: 'Error al obtener los usuarios. Intente más tarde.' });
   }
 };
 
 const getUsuarioPorId = async (req, res, next) => {
   const usuarioId = req.params.id;
 
-  if (req.usuarioAutenticado.rol !== 'superadmin' && req.usuarioAutenticado.usuarioId !== usuarioId) {
-    return res.status(403).json({ message: 'No tienes permiso para ver este usuario.' });
-  }
+  
+  if (req.usuarioAutenticado.rol !== 'superadmin' && req.usuarioAutenticado.usuarioId.toString() !== usuarioId.toString()) {
+    return res.status(403).json({ mensaje: 'No tienes permiso para ver este usuario.' });
+}
+
 
   try {
     const usuario = await Usuario.findById(usuarioId);
     if (!usuario) {
-      return res.status(404).json({ message: 'Usuario no encontrado.' });
+      return res.status(404).json({ mensaje: 'Usuario no encontrado.' });
     }
 
     res.status(200).json({
@@ -48,11 +50,12 @@ const getUsuarioPorId = async (req, res, next) => {
       nombre: usuario.nombre,
       email: usuario.email,
       rol: usuario.rol,
-      ...req.body
+      titulo: usuario.titulo || null,
+      biografia: usuario.biografia || null
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error al obtener el usuario.' });
+    res.status(500).json({ mensaje: 'Error al obtener el usuario.' });
   }
 };
 
@@ -61,21 +64,21 @@ const eliminarUsuario = async (req, res, next) => {
   const usuarioId = req.params.id;
 
   if (req.usuarioAutenticado.rol !== 'superadmin' && req.usuarioAutenticado.usuarioId !== usuarioId) {
-    return res.status(403).json({ message: 'No tienes permiso para eliminar este usuario.' });
+    return res.status(403).json({ mensaje: 'No tienes permiso para eliminar este usuario.' });
   }
 
   try {
     const usuario = await Usuario.findById(usuarioId);
     if (!usuario) {
-      return res.status(404).json({ message: 'Usuario no encontrado.' });
+      return res.status(404).json({ mensaje: 'Usuario no encontrado.' });
     }
 
     await Usuario.findByIdAndDelete(usuarioId);
 
-    res.status(200).json({ message: 'Usuario eliminado correctamente.' });
+    res.status(200).json({ mensaje: 'Usuario eliminado correctamente.' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error al eliminar el usuario.' });
+    res.status(500).json({ mensaje: 'Error al eliminar el usuario.' });
   }
 };
 
@@ -86,51 +89,52 @@ const editarUsuario = async (req, res, next) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-
   const usuarioId = req.params.id;
-  const { nombre, email, rol, biografia, titulo } = req.body;
+  const { nombre, email, biografia, titulo, rol } = req.body;
 
+  // Solo el superadmin o el mismo usuario puede editar
   if (req.usuarioAutenticado.rol !== 'superadmin' && req.usuarioAutenticado.usuarioId !== usuarioId) {
-    return res.status(403).json({ message: 'No tienes permiso para editar este usuario.' });
+    return res.status(403).json({ mensaje: 'No tienes permiso para editar este usuario.' });
   }
 
   try {
     const usuario = await Usuario.findById(usuarioId);
     if (!usuario) {
-      return res.status(404).json({ message: 'Usuario no encontrado.' });
+      return res.status(404).json({ mensaje: 'Usuario no encontrado.' });
     }
 
-
-    if (rol && req.usuarioAutenticado.rol !== 'superadmin') {
-      return res.status(403).json({ message: 'No puedes modificar el rol.' });
+    if (rol && rol !== usuario.rol) {
+      return res.status(400).json({ mensaje: 'No se puede cambiar el rol de un usuario existente.' });
     }
 
-    usuario.nombre = nombre || usuario.nombre;
-    usuario.email = email || usuario.email;
-    if (rol) {
-      usuario.rol = rol;
-    }
-    if ('biografia' in req.body) usuario.biografia = biografia;
-    if ('titulo' in req.body) usuario.titulo = titulo;
+    if (nombre) usuario.nombre = nombre;
+    if (email) usuario.email = email;
 
+    if (usuario.rol === 'docente') {
+      if ('biografia' in req.body) usuario.biografia = biografia;
+      if ('titulo' in req.body) usuario.titulo = titulo;
+    } else if (usuario.rol === 'estudiante') {
+      if ('biografia' in req.body) usuario.biografia = biografia;
+    }
 
     await usuario.save();
 
     res.json({
-      message: 'Usuario actualizado correctamente.',
+      mensaje: 'Usuario actualizado correctamente.',
       usuario: {
         id: usuario.id,
         nombre: usuario.nombre,
         email: usuario.email,
-        rol: usuario.rol,
-        ...req.body
+        rol: usuario.rol
       }
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error al actualizar el usuario.' });
+    res.status(500).json({ mensaje: 'Error al actualizar el usuario.' });
   }
 };
+
+
 
 
 const crearDocenteOSuperadmin = async (req, res, next) => {

@@ -52,9 +52,6 @@ router.patch(
             .notEmpty().withMessage('El correo electrónico no puede estar vacío').bail()
             .normalizeEmail({ gmail_remove_dots: false })
             .isEmail().withMessage('Debe ser un correo electrónico válido'),
-        check('rol')
-            .optional({ checkFalsy: true })
-            .isIn(['superadmin', 'docente']).withMessage('Rol inválido'),
         check('titulo')
             .optional({ checkFalsy: true })
             .isLength({ max: 100 }).withMessage('El título debe tener como máximo 100 caracteres'),

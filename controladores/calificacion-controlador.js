@@ -1,10 +1,17 @@
+const { validationResult } = require('express-validator');
 const Calificacion = require('../modelos/Calificacion');
+
 const Curso = require('../modelos/Curso');
 
 const crearCalificacion = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+  }
+
+
   const { cursoId, estudianteId, nota } = req.body;
   const usuarioId = req.usuarioAutenticado.usuarioId;
-
 
   try {
     const curso = await Curso.findById(cursoId);
@@ -39,6 +46,12 @@ const crearCalificacion = async (req, res, next) => {
 };
 
 const editarCalificacion = async (req, res, next) => {
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+  }
+  
   const { id } = req.params;
   const { nota } = req.body;
   const usuarioId = req.usuarioAutenticado.usuarioId;
