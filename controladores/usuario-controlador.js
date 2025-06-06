@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const { Superadmin, Docente, Usuario } = require('../modelos/Usuario');
+const Curso = require('../modelos/Curso');
 
 
 const getUsuarios = async (req, res, next) => {
@@ -71,6 +72,11 @@ const eliminarUsuario = async (req, res, next) => {
     const usuario = await Usuario.findById(usuarioId);
     if (!usuario) {
       return res.status(404).json({ mensaje: 'Usuario no encontrado.' });
+    }
+
+    const cursosAsignados = await Curso.find({ docenteId: usuarioId });
+    if (cursosAsignados.length > 0) {
+      return res.status(400).json({ mensaje: 'No se puede eliminar el usuario porque está asignado como docente en uno o más cursos.' });
     }
 
     await Usuario.findByIdAndDelete(usuarioId);
