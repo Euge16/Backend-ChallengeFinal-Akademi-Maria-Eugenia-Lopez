@@ -1,0 +1,744 @@
+{
+	"info": {
+		"_postman_id": "7edff48a-d24c-4011-89f3-f003b6113db2",
+		"name": "Plataforma-Cursos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44120300",
+		"_collection_link": "https://eugenia-1965398.postman.co/workspace/Eugenia's-Workspace~abba98ab-04e6-4ebe-89b9-e15cdb259988/collection/44120300-7edff48a-d24c-4011-89f3-f003b6113db2?action=share&source=collection_link&creator=44120300"
+	},
+	"item": [
+		{
+			"name": "Autenticación",
+			"item": [
+				{
+					"name": "autenticacion/registrarse",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODFkZWYyOGIwNmI2YjMyNDRmMjI0ZjQiLCJlbWFpbCI6ImxvcC5tYXJpYWV1Z2VuaWFAZ21haWwuY29tIiwicm9sIjoiYWRtaW4iLCJpYXQiOjE3NDY3OTIzNTIsImV4cCI6MTc0OTM4NDM1Mn0.bjDCFWhQn_1uYvOPPafyOOU75MfEt0Vu_tPzy18c58w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Lucia\",\r\n    \"email\": \"lucia@test.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/autenticacion/registrarse",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"autenticacion",
+								"registrarse"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "autenticacion/iniciar-sesion",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"lop.mariaeugenia@gmail.com\",\r\n    \"password\": \"eugenia\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/autenticacion/iniciar-sesion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"autenticacion",
+								"iniciar-sesion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "autenticacion/recuperar-password",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"lop.mariaeugenia@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/autenticacion/recuperar-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"autenticacion",
+								"recuperar-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "autenticacion/restablecer-password/:token",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nuevaPassword\": \"eugenia\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/autenticacion/restablecer-password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MzQ4NzNiNTg3N2QwZGQyZGFjNDBjZSIsImlhdCI6MTc0ODI3NjQ3NywiZXhwIjoxNzQ4MjgwMDc3fQ.wnKS68wFQktvS208fBsnE0mOZl-Wm7tIG4mA_JA8CWc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"autenticacion",
+								"restablecer-password",
+								"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MzQ4NzNiNTg3N2QwZGQyZGFjNDBjZSIsImlhdCI6MTc0ODI3NjQ3NywiZXhwIjoxNzQ4MjgwMDc3fQ.wnKS68wFQktvS208fBsnE0mOZl-Wm7tIG4mA_JA8CWc"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuarios",
+			"item": [
+				{
+					"name": "usuarios",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "usuarios",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM1YThkMzgzY2ZiOGQxMTA3MjQ1MTkiLCJlbWFpbCI6ImxvcC5tYXJpYWV1Z2VuaWFAZ21haWwuY29tIiwicm9sIjoic3VwZXJhZG1pbiIsImlhdCI6MTc0ODM0ODgzOSwiZXhwIjoxNzQ4MzUyNDM5fQ.PUhjPmETgIDxKFmrh2C-T_Xp6dnypwS5B2SpT_lqDPc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"Dante\",\r\n  \"email\": \"dante@test.com\",\r\n  \"password\": \"123456\",\r\n  \"rol\": \"docente\",\r\n  \"titulo\": \"¡Soy diseñador y programador web desde hace 19 años!\",\r\n  \"biografia\": \"He trabajado con múltiples tecnologías y ahora enseño desarrollo web.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/usuarios/registrar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"usuarios",
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "usuarios/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM1YjM2YWU2YzdhYzk5ZmU4Mzc1NzciLCJlbWFpbCI6ImRhbnRlQHRlc3QuY29tIiwicm9sIjoiZG9jZW50ZSIsImlhdCI6MTc0ODM1OTI1OSwiZXhwIjoxNzQ4MzYyODU5fQ.M-wJdxSF88bRB8xAE5uPbO9Bx-xGzzo-z3ic9vctKV0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Lucia Garcia\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/usuarios/6835d7ef5c8a14b48a66b613",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"usuarios",
+								"6835d7ef5c8a14b48a66b613"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "usuarios/:id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM1YjM2YWU2YzdhYzk5ZmU4Mzc1NzciLCJlbWFpbCI6ImRhbnRlQHRlc3QuY29tIiwicm9sIjoiZG9jZW50ZSIsImlhdCI6MTc0ODM1OTI1OSwiZXhwIjoxNzQ4MzYyODU5fQ.M-wJdxSF88bRB8xAE5uPbO9Bx-xGzzo-z3ic9vctKV0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Lucia Garcia\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/usuarios/6835b6d0f82942734afbf848",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"usuarios",
+								"6835b6d0f82942734afbf848"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "usuarios/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM1YjM2YWU2YzdhYzk5ZmU4Mzc1NzciLCJlbWFpbCI6ImRhbnRlQHRlc3QuY29tIiwicm9sIjoiZG9jZW50ZSIsImlhdCI6MTc0ODM1OTI1OSwiZXhwIjoxNzQ4MzYyODU5fQ.M-wJdxSF88bRB8xAE5uPbO9Bx-xGzzo-z3ic9vctKV0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Lucia Garcia\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/usuarios/6835b36ae6c7ac99fe837577",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"usuarios",
+								"6835b36ae6c7ac99fe837577"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cursos",
+			"item": [
+				{
+					"name": "cursos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM1ZGVhOTYyNmRmMmIxZGRjODJkMGIiLCJlbWFpbCI6ImFuZ2llQHRlc3QuY29tIiwicm9sIjoiZXN0dWRpYW50ZSIsImlhdCI6MTc0ODUzNjg1MCwiZXhwIjoxNzQ4NTQwNDUwfQ.J31xRu5HEDtdbRm9hBBaWPUbsHiG9wMibS_z7AhXCD8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/cursos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cursos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cursos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM3MDVmOGU5MTNkZjJmYjFhY2ZkYTUiLCJlbWFpbCI6ImRhbnRlQHRlc3QuY29tIiwicm9sIjoiZG9jZW50ZSIsImlhdCI6MTc0ODQzOTcwNiwiZXhwIjoxNzQ4NDQzMzA2fQ.7YvYmuveCgmD9_tPtnbQunirue4vE8WL7wZ04sjkpAk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\":\"HTML y CSS\",\r\n    \"descripcion\": \"En este curso aprendera a....\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/cursos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cursos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cursos/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM3MDVmOGU5MTNkZjJmYjFhY2ZkYTUiLCJlbWFpbCI6ImRhbnRlQHRlc3QuY29tIiwicm9sIjoiZG9jZW50ZSIsImlhdCI6MTc0ODQ0MjUzMywiZXhwIjoxNzQ4NDQ2MTMzfQ.nTryPjqiD7n2FbuEg6LhKJnXfDYV59gYoOPxt5Zdo-U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/cursos/683714e134e297f44deb2240",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cursos",
+								"683714e134e297f44deb2240"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cursos/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM3MDVmOGU5MTNkZjJmYjFhY2ZkYTUiLCJlbWFpbCI6ImRhbnRlQHRlc3QuY29tIiwicm9sIjoiZG9jZW50ZSIsImlhdCI6MTc0ODQ0MjUzMywiZXhwIjoxNzQ4NDQ2MTMzfQ.nTryPjqiD7n2FbuEg6LhKJnXfDYV59gYoOPxt5Zdo-U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\": \"En el siguiente curso....\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/cursos/68371f791d97f574ac13ed6d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cursos",
+								"68371f791d97f574ac13ed6d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cursos/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM3MDVmOGU5MTNkZjJmYjFhY2ZkYTUiLCJlbWFpbCI6ImRhbnRlQHRlc3QuY29tIiwicm9sIjoiZG9jZW50ZSIsImlhdCI6MTc0ODQ0MjUzMywiZXhwIjoxNzQ4NDQ2MTMzfQ.nTryPjqiD7n2FbuEg6LhKJnXfDYV59gYoOPxt5Zdo-U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/cursos/68371f791d97f574ac13ed6d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cursos",
+								"68371f791d97f574ac13ed6d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cursos/docente/:id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM3MDVmOGU5MTNkZjJmYjFhY2ZkYTUiLCJlbWFpbCI6ImRhbnRlQHRlc3QuY29tIiwicm9sIjoiZG9jZW50ZSIsImlhdCI6MTc0ODQ0MjUzMywiZXhwIjoxNzQ4NDQ2MTMzfQ.nTryPjqiD7n2FbuEg6LhKJnXfDYV59gYoOPxt5Zdo-U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\":\"HTML y CSS\",\r\n    \"descripcion\": \"En este curso aprendera a....\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/cursos/docente/683705f8e913df2fb1acfda5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"cursos",
+								"docente",
+								"683705f8e913df2fb1acfda5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inscripciones",
+			"item": [
+				{
+					"name": "inscripciones",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM1ZGVhOTYyNmRmMmIxZGRjODJkMGIiLCJlbWFpbCI6ImFuZ2llQHRlc3QuY29tIiwicm9sIjoiZXN0dWRpYW50ZSIsImlhdCI6MTc0ODUyMTYyNywiZXhwIjoxNzQ4NTI1MjI3fQ.1j_lNRF-yWsqmaFOzKA58TAl60WR1m4W3HU3jjAO30I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cursoId\":\"683714e134e297f44deb2240\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/inscripciones",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"inscripciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "inscripciones/estudiante/:id",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "inscripciones/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM1ZGVhOTYyNmRmMmIxZGRjODJkMGIiLCJlbWFpbCI6ImFuZ2llQHRlc3QuY29tIiwicm9sIjoiZXN0dWRpYW50ZSIsImlhdCI6MTc0ODUzMDcxNywiZXhwIjoxNzQ4NTM0MzE3fQ.GKGuzM3HNqudATbAYriacLPoyCQ5wYn7wn_qdndRUyQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/inscripciones/683877863a1a24f45145764a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"inscripciones",
+								"683877863a1a24f45145764a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "inscripciones/curso/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM3MDVmOGU5MTNkZjJmYjFhY2ZkYTUiLCJlbWFpbCI6ImRhbnRlQHRlc3QuY29tIiwicm9sIjoiZG9jZW50ZSIsImlhdCI6MTc0ODU0MzcyMCwiZXhwIjoxNzQ4NTQ3MzIwfQ.AWfTwLMW-tF3_MGkdLGH8ikvvd5EETgw2uFq2nv4yc8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/inscripciones/curso/68388d167440da71feb86224",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"inscripciones",
+								"curso",
+								"68388d167440da71feb86224"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Calificaciones",
+			"item": [
+				{
+					"name": "calificaciones",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM3MDVmOGU5MTNkZjJmYjFhY2ZkYTUiLCJlbWFpbCI6ImRhbnRlQHRlc3QuY29tIiwicm9sIjoiZG9jZW50ZSIsImlhdCI6MTc0ODYwOTc5NywiZXhwIjoxNzQ4NjEzMzk3fQ.sNIUqthQOufEbHAEkRm1zFRdkXga4UWzI74BO_FsXZc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cursoId\":\"68388d167440da71feb86224\",\r\n    \"estudianteId\":\"6835dea9626df2b1ddc82d0b\",\r\n    \"nota\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/calificaciones",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"calificaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "calificaciones/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2ODM3MDVmOGU5MTNkZjJmYjFhY2ZkYTUiLCJlbWFpbCI6ImRhbnRlQHRlc3QuY29tIiwicm9sIjoiZG9jZW50ZSIsImlhdCI6MTc0ODYwOTc5NywiZXhwIjoxNzQ4NjEzMzk3fQ.sNIUqthQOufEbHAEkRm1zFRdkXga4UWzI74BO_FsXZc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nota\":9\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/calificaciones/6839b34067dd27c40deef3aa",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"calificaciones",
+								"6839b34067dd27c40deef3aa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "calificaciones/estudiante/:id",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

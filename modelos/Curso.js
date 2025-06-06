@@ -8,7 +8,7 @@ const cursoSchema = new Schema({
     descripcion: { type: String },
     docenteId: { type: mongoose.Types.ObjectId, required: true, ref: 'Usuario'},
     estudiantes: [{ type: mongoose.Types.ObjectId, required: true, ref: 'Usuario'}],
-    cupo: { type: Number, required: true, default: 4 }
+    cupo: { type: Number, required: true }
 
 }, { timestamps: true });
 

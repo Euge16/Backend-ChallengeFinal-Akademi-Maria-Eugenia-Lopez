@@ -15,12 +15,12 @@ const crearInscripcion = async (req, res, next) => {
         
         const existeInscripcion = await Inscripcion.findOne({ estudianteId, cursoId });
         if (existeInscripcion) {
-            return res.status(400).json({ mensaje: 'Ya estas inscrito a este curso' });
+            return res.status(200).json({ mensaje: 'Ya estas inscrito a este curso' });
         }
 
         const inscriptosCantidad = await Inscripcion.countDocuments({ cursoId });
         if (inscriptosCantidad >= curso.cupo) {
-            return res.status(400).json({ mensaje: 'El curso ya alcanzo su cupo maximo.' });
+            return res.status(200).json({ mensaje: 'El curso ya alcanzo su cupo maximo.' });
         }
 
 
@@ -40,29 +40,49 @@ const crearInscripcion = async (req, res, next) => {
     }
 }
 
-const getInscripcionesPorEstudiante = async (req, res) => {
-    const { id } = req.params;
 
-    try {
-        const estudiante = await Usuario.findById(id); 
-        if (!estudiante) {
-            return res.status(404).json({ mensaje: 'Estudiante no encontrado' });
-        }
+const getInscripcionesPorEstudiante = async (req, res, next) => {
+  const { pagina, limite } = req.query;
+  const paginaInt = parseInt(pagina);
+  const limiteInt = parseInt(limite);
+  const { id } = req.params;
 
-        const inscripciones = await Inscripcion.find({ estudianteId: id })
-            .populate('cursoId', 'nombre descripcion')
-            .populate('estudianteId', 'nombre email');
-
-        if(!inscripciones || inscripciones.length === 0){
-            return res.status(404).json({ message: 'No tienes inscripciones.' });
-        }
-
-        return res.status(200).json({ inscripciones });
-    } catch (error) {
-        console.error('Error al obtener inscripciones:', error);
-        return res.status(500).json({ mensaje: 'Error al obtener inscripciones', error });
+  try {
+    const estudiante = await Usuario.findById(id);
+    if (!estudiante) {
+      return res.status(404).json({ mensaje: 'Estudiante no encontrado' });
     }
+
+    const inscripciones = await Inscripcion.find({ estudianteId: id })
+      .populate('cursoId', 'nombre descripcion')
+      .populate('estudianteId', 'nombre email')
+      .skip((paginaInt - 1) * limiteInt)
+      .limit(limiteInt);
+
+    const total = await Inscripcion.countDocuments({ estudianteId: id });
+
+
+    if (inscripciones.length === 0) {
+      return res.status(200).json({ 
+        mensaje: 'No tienes inscripciones para mostrar.',
+        paginaActual: paginaInt,
+        totalPaginas: 0,
+        totalRegistros: 0,
+        inscripciones: []
+      });
+    }
+
+    return res.status(200).json({
+      paginaActual: paginaInt,
+      totalPaginas: Math.ceil(total / limiteInt),
+      totalRegistros: total,
+      inscripciones
+    });
+  } catch (error) {
+      return res.status(500).json({ mensaje: 'Error al obtener inscripciones', error });
+  }
 };
+
 
 
 const eliminarInscripcion = async (req, res, next) => {
@@ -87,7 +107,7 @@ const eliminarInscripcion = async (req, res, next) => {
       await curso.save();
     }
 
-    res.json({ message: 'Inscripción cancelada.' });
+    res.json({ mensaje: 'Inscripción cancelada.' });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al cancelar inscripción', error });
   }

@@ -1,6 +1,12 @@
+const { validationResult } = require('express-validator');
 const Curso = require('../modelos/Curso');
 
 const crearCurso = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     const { nombre, descripcion, cupo } = req.body;
     const docenteId = req.usuarioAutenticado.usuarioId;
 
@@ -29,9 +35,25 @@ const crearCurso = async (req, res, next) => {
 };
 
 const getCursos = async (req, res, next) => {
+    const { pagina , limite, nombre } = req.query;
+    const paginaInt = parseInt(pagina);
+    const limiteInt = parseInt(limite);
+    const filtro = {};
+    if(nombre) filtro.nombre = new RegExp(nombre, 'i');
+    
     try {
-        const cursos = await Curso.find().select('nombre descripcion docenteId').populate('docenteId', 'nombre email');
-        res.status(200).json({ cursos });
+        const cursos = await Curso.find(filtro).select('nombre descripcion docenteId cupo').populate('docenteId', 'nombre email')
+            .skip((paginaInt - 1) * limiteInt)
+            .limit(limiteInt);
+
+        const total = await Curso.countDocuments(filtro);
+        res.status(200).json({
+            paginaActual: paginaInt,
+            totalPaginas: Math.ceil(total / limiteInt),
+            totalRegistros: total,
+            cursos
+        });
+
     } catch (error) {
         console.error('Error al obtener cursos:', error);
         res.status(500).json({ mensaje: 'Error al obtener los cursos', error });
@@ -40,7 +62,7 @@ const getCursos = async (req, res, next) => {
 
 const getCursoPorId = async (req, res, next) => {
     try {
-        const curso = await Curso.findById(req.params.id).select('nombre descripcion docenteId').populate('docenteId', 'nombre email');
+        const curso = await Curso.findById(req.params.id).select('nombre descripcion docenteId cupo').populate('docenteId', 'nombre email');
         if (!curso) {
             return res.status(404).json({ mensaje: 'Curso no encontrado' });
         }
@@ -52,6 +74,10 @@ const getCursoPorId = async (req, res, next) => {
 };
 
 const editarCurso = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     
     try {
         const { id } = req.params;
@@ -62,11 +88,10 @@ const editarCurso = async (req, res, next) => {
             return res.status(404).json({ mensaje: 'Curso no encontrado' });
         }
 
-        if (curso.docenteId.toString() !== req.usuarioAutenticado.usuarioId) {
+        if ( req.usuarioAutenticado.rol !== 'superadmin' && curso.docenteId.toString() !== req.usuarioAutenticado.usuarioId.toString()) {
             return res.status(403).json({ mensaje: 'No tienes permiso para editar este curso' });
         }
 
-        
         if (nombre) curso.nombre = nombre;
         if (descripcion) curso.descripcion = descripcion;
         if (cupo) curso.cupo = cupo;
@@ -89,7 +114,7 @@ const eliminarCurso = async (req, res, next) => {
             return res.status(404).json({ mensaje: 'Curso no encontrado' });
         }
 
-        if (curso.docenteId.toString() !== req.usuarioAutenticado.usuarioId) {
+        if ( req.usuarioAutenticado.rol !== 'superadmin' && curso.docenteId.toString() !== req.usuarioAutenticado.usuarioId ) {
             return res.status(403).json({ mensaje: 'No tienes permiso para eliminar este curso' });
         }
 
@@ -103,21 +128,42 @@ const eliminarCurso = async (req, res, next) => {
 };
 
 const getCursosDelProfesor = async (req, res, next) => {
+    const { pagina, limite, nombre } = req.query;
+    const paginaInt = parseInt(pagina);
+    const limiteInt = parseInt(limite);
     const usuarioId = req.usuarioAutenticado.usuarioId;
-    const rol = req.usuarioAutenticado.rol;
     const { id } = req.params;
 
-    if (usuarioId !== id && rol !== 'superadmin') {
+  
+    if (usuarioId !== id) {
         return res.status(403).json({ mensaje: 'No tienes permiso para ver estos cursos.' });
     }
 
-    try {
-        const cursos = await Curso.find({ docenteId: id });
-        res.status(200).json({ cursos });
+    
+    const filtro = {};
+    if (nombre) filtro.nombre = new RegExp(nombre, 'i');
+
+    try { 
+        const cursos = await Curso.find({ docenteId: id, ...filtro })
+            .select('nombre descripcion docenteId cupo')
+            .populate('docenteId', 'nombre email')
+            .skip((paginaInt - 1) * limiteInt)
+            .limit(limiteInt);
+
+        const total = await Curso.countDocuments({ docenteId: id, ...filtro });
+
+        res.status(200).json({
+            paginaActual: paginaInt,
+            totalPaginas: Math.ceil(total / limiteInt),
+            totalRegistros: total,
+            cursos
+        });
+
     } catch (error) {
         res.status(500).json({ mensaje: 'Error al obtener cursos del profesor', error });
     }
 };
+
 
 
 
